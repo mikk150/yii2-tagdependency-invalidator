@@ -5,6 +5,9 @@ namespace mikk150\tagdependency;
 use yii\base\Behavior;
 use yii\helpers\ArrayHelper;
 use yii\caching\TagDependency;
+use yii\db\BaseActiveRecord;
+use yii\di\Instance;
+use yii\caching\CacheInterface;
 
 class InvalidateBehavior extends Behavior
 {
@@ -12,12 +15,33 @@ class InvalidateBehavior extends Behavior
 
     public $tags;
 
+    public function init()
+    {
+        if (!$this->cache) {
+            $this->cache = 'cache';
+        }
+
+        $this->cache = Instance::ensure($this->cache, CacheInterface::class);
+    }
+
     /**
      * Invalidates the cache
      */
     public function invalidate()
     {
         TagDependency::invalidate($this->cache, array_map([$this, 'buildKey'], (array) $this->tags));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function events()
+    {
+        return [
+            BaseActiveRecord::EVENT_AFTER_UPDATE => 'invalidate',
+            BaseActiveRecord::EVENT_AFTER_INSERT => 'invalidate',
+            BaseActiveRecord::EVENT_AFTER_DELETE => 'invalidate',
+        ];
     }
 
     /**
