@@ -1,5 +1,9 @@
 # Yii2 tagdependency invalidation behavior
 
+[![Build Status](https://travis-ci.org/mikk150/yii2-tagdependency-flusher.svg?branch=master)](https://travis-ci.org/mikk150/yii2-tagdependency-flusher)
+[![codecov](https://codecov.io/gh/mikk150/yii2-tagdependency-flusher/branch/master/graph/badge.svg)](https://codecov.io/gh/mikk150/yii2-tagdependency-flusher)
+
+
 Usage
 -----
 To use this behavior, add it to model's or components behaviors model
@@ -48,4 +52,4 @@ public function actionView($id)
 
 if `BaseActiveRecord::EVENT_AFTER_UPDATE`, `BaseActiveRecord::EVENT_AFTER_INSERT` or `BaseActiveRecord::EVENT_AFTER_DELETE` is triggered, then cache is automatically invalidated for this model based on key rules
 
-additionally, you can also clear cache by executing `invalidate()` on model
+additionally, you can also clear cache by executing `invalidate()` on model1
