@@ -27,11 +27,14 @@ class CacheInvalidatorTest extends TestCase
 
     public function testBuildKey()
     {
+        $cache = new FileCache(['cachePath' => '@yiiunit/runtime/cache']);
+
         $model = new CacheFlushModel([
             'attribute' => 'test'
         ]);
 
         $behavior = new InvalidateBehavior([
+            'cache' => $cache,
             'tags' => [
                 [
                     $model->className(),
