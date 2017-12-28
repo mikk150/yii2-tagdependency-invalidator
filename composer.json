@@ -1,5 +1,5 @@
 {
-    "name": "mikk150/yii2-tagdependency-flusher",
+    "name": "mikk150/yii2-tagdependency-invalidator",
     "description": "yii2 sms sending component",
     "type": "yii2-extension",
     "keywords": [
