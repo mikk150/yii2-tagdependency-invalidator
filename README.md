@@ -1,7 +1,7 @@
 # Yii2 tagdependency invalidation behavior
 
-[![Build Status](https://travis-ci.org/mikk150/yii2-tagdependency-flusher.svg?branch=master)](https://travis-ci.org/mikk150/yii2-tagdependency-flusher)
-[![codecov](https://codecov.io/gh/mikk150/yii2-tagdependency-flusher/branch/master/graph/badge.svg)](https://codecov.io/gh/mikk150/yii2-tagdependency-flusher)
+[![Build Status](https://travis-ci.org/mikk150/yii2-tagdependency-invalidator.svg?branch=master)](https://travis-ci.org/mikk150/yii2-tagdependency-invalidator)
+[![codecov](https://codecov.io/gh/mikk150/yii2-tagdependency-invalidator/branch/master/graph/badge.svg)](https://codecov.io/gh/mikk150/yii2-tagdependency-invalidator)
 
 
 Usage
