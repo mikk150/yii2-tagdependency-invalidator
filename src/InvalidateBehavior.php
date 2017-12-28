@@ -7,7 +7,6 @@ use yii\helpers\ArrayHelper;
 use yii\caching\TagDependency;
 use yii\db\BaseActiveRecord;
 use yii\di\Instance;
-use yii\caching\CacheInterface;
 
 class InvalidateBehavior extends Behavior
 {
@@ -21,7 +20,7 @@ class InvalidateBehavior extends Behavior
             $this->cache = 'cache';
         }
 
-        $this->cache = Instance::ensure($this->cache, CacheInterface::class);
+        $this->cache = Instance::ensure($this->cache, 'yii\caching\CacheInterface');
     }
 
     /**
