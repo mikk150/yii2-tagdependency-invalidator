@@ -9,6 +9,9 @@
         "cache"
     ],
     "license": "GPL-2.0",
+    "config": {
+        "sort-packages": true
+    },
     "authors": [
         {
             "name": "Mikk Tendermann",
@@ -19,7 +22,8 @@
         "yiisoft/yii2": "~2.0.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.8.34"
+        "codeception/codeception": "^3.1",
+        "yiisoft/yii2-coding-standards": "^2.0"
     },
     "repositories": [
         {
