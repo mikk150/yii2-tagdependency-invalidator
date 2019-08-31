@@ -79,11 +79,11 @@ class InvalidateBehavior extends Behavior
     protected function map($array, $callable)
     {
         return array_combine(
-            array_keys((array) $array),
+            array_keys($array),
             array_map(
                 $callable,
-                array_values((array) $array),
-                array_keys((array) $array)
+                array_values($array),
+                array_keys($array)
             )
         );
     }
