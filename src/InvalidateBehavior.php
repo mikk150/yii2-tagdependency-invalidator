@@ -3,24 +3,30 @@
 namespace mikk150\tagdependency;
 
 use yii\base\Behavior;
-use yii\helpers\ArrayHelper;
+use yii\base\InvalidConfigException;
+use yii\caching\CacheInterface;
 use yii\caching\TagDependency;
 use yii\db\BaseActiveRecord;
 use yii\di\Instance;
+use yii\helpers\ArrayHelper;
 
 class InvalidateBehavior extends Behavior
 {
-    public $cache;
+    /**
+     * @var CacheInterface|array|string
+     */
+    public $cache = 'cache';
 
     public $tags;
 
+    /**
+     * @inheritDoc
+     * @throws InvalidConfigException
+     */
     public function init()
     {
-        if (!$this->cache) {
-            $this->cache = 'cache';
-        }
-
-        $this->cache = Instance::ensure($this->cache, 'yii\caching\CacheInterface');
+        parent::init();
+        $this->cache = Instance::ensure($this->cache, CacheInterface::class);
     }
 
     /**
@@ -50,6 +56,9 @@ class InvalidateBehavior extends Behavior
      */
     protected function buildKey($keyParts)
     {
+        if (!is_array($keyParts)) {
+            return $keyParts;
+        }
         $owner = $this->owner;
         return $this->map($keyParts, function ($part, $key) use ($owner) {
             if (is_int($key)) {
