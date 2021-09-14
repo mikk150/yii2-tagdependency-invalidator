@@ -1,5 +1,6 @@
 Under development
 ------------------
+- Make a refresh before invalidating cache to normalize data types (mikk150)
 
 1.1.0 (2019-09-03)
 ------------------
