@@ -22,7 +22,8 @@
         "yiisoft/yii2": "~2.0.0"
     },
     "require-dev": {
-        "codeception/codeception": "^3.1",
+        "codeception/codeception": "^4.1.22",
+        "codeception/module-asserts": "^1.0.0",
         "yiisoft/yii2-coding-standards": "^2.0"
     },
     "repositories": [
