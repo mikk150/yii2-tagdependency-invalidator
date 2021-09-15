@@ -18,21 +18,91 @@ class InvalidateBehaviorTest extends Unit
         new InvalidateBehavior;
     }
 
-    public function testCacheIsFlushedAfterDelete()
+    public function testPartIsNotArray()
     {
-        $cache = new ArrayCache;
+        $cache = new ArrayCache();
+
         $cache->set('cache-key', 'cache-value', null, new TagDependency([
             'tags' => [
-                'tag-name',
+               'not_array'
             ],
         ]));
 
-        $model = new ActiveRecord;
+        $model = $this->construct(ActiveRecord::class, [], [
+            'getPrimaryKey' => 10,
+            'refresh' => true,
+        ]);
+
         $model->attachBehavior('invalidate', [
             'class' => InvalidateBehavior::class,
             'cache' => $cache,
             'tags' => [
-                'tag-name',
+               'not_array'
+            ],
+        ]);
+
+        $model->trigger(ActiveRecord::EVENT_AFTER_DELETE);
+
+        $this->assertFalse($cache->get('cache-key'));
+    }
+
+    public function testPartIsNotMapping()
+    {
+        $cache = new ArrayCache();
+
+        $cache->set('cache-key', 'cache-value', null, new TagDependency([
+            'tags' => [
+               ['not_array']
+            ],
+        ]));
+
+        $model = $this->construct(ActiveRecord::class, [], [
+            'getPrimaryKey' => 10,
+            'refresh' => true,
+        ]);
+
+        $model->attachBehavior('invalidate', [
+            'class' => InvalidateBehavior::class,
+            'cache' => $cache,
+            'tags' => [
+               ['not_array']
+            ],
+        ]);
+
+        $model->trigger(ActiveRecord::EVENT_AFTER_DELETE);
+
+        $this->assertFalse($cache->get('cache-key'));
+    }
+
+    public function testCacheIsFlushedAfterDelete()
+    {
+        $cache = new ArrayCache();
+
+        $cache->set('cache-key', 'cache-value', null, new TagDependency([
+            'tags' => [
+                [
+                    'primaryKey' => 10,
+                ],
+            ],
+        ]));
+
+        $model = $this->construct(ActiveRecord::class, [], [
+            'attributes' => function () {
+                return ['id'];
+            },
+            'getPrimaryKey' => 10,
+            'refresh' => true,
+        ]);
+
+        $model->id = 10;
+
+        $model->attachBehavior('invalidate', [
+            'class' => InvalidateBehavior::class,
+            'cache' => $cache,
+            'tags' => [
+                [
+                    'primaryKey' => 'id',
+                ]
             ],
         ]);
 
@@ -43,19 +113,33 @@ class InvalidateBehaviorTest extends Unit
 
     public function testCacheIsFlushedAfterUpdate()
     {
-        $cache = new ArrayCache;
+        $cache = new ArrayCache();
+
         $cache->set('cache-key', 'cache-value', null, new TagDependency([
             'tags' => [
-                ['tag-name'],
+                [
+                    'primaryKey' => 10,
+                ],
             ],
         ]));
 
-        $model = new ActiveRecord;
+        $model = $this->construct(ActiveRecord::class, [], [
+            'attributes' => function () {
+                return ['id'];
+            },
+            'getPrimaryKey' => 10,
+            'refresh' => true,
+        ]);
+
+        $model->id = 10;
+
         $model->attachBehavior('invalidate', [
             'class' => InvalidateBehavior::class,
             'cache' => $cache,
             'tags' => [
-                ['tag-name'],
+                [
+                    'primaryKey' => 'id',
+                ]
             ],
         ]);
 
@@ -66,58 +150,38 @@ class InvalidateBehaviorTest extends Unit
 
     public function testCacheIsFlushedAfterInsert()
     {
-        $cache = new ArrayCache;
+        $cache = new ArrayCache();
+
         $cache->set('cache-key', 'cache-value', null, new TagDependency([
             'tags' => [
                 [
-                    DynamicModel::class,
-                    'country' => 'Whatever',
+                    'primaryKey' => 10,
                 ],
-            ],
-        ]));
-        $cache->set('cache-key-2', 'cache-value', null, new TagDependency([
-            'tags' => [
-                [
-                    DynamicModel::class,
-                    'country' => 'Unknown',
-                ],
-            ],
-        ]));
-        $cache->set('cache-key-3', 'cache-value', null, new TagDependency([
-            'tags' => [
-                [
-                    DynamicModel::class,
-                    'country' => 'Unknown',
-                ],
-                [
-                    'with-integer',
-                    123
-                ]
             ],
         ]));
 
-        $model = new DynamicModel([
-            'country' => 'Whatever',
+        $model = $this->construct(ActiveRecord::class, [], [
+            'attributes' => function () {
+                return ['id'];
+            },
+            'getPrimaryKey' => 10,
+            'refresh' => true,
         ]);
+
+        $model->id = 10;
+
         $model->attachBehavior('invalidate', [
             'class' => InvalidateBehavior::class,
             'cache' => $cache,
             'tags' => [
                 [
-                    DynamicModel::class,
-                    'country' => 'country',
-                ],
-                [
-                    'with-integer',
-                    123
-                ],
+                    'primaryKey' => 'id',
+                ]
             ],
         ]);
 
         $model->trigger(ActiveRecord::EVENT_AFTER_INSERT);
 
         $this->assertFalse($cache->get('cache-key'));
-        $this->assertNotFalse($cache->get('cache-key-2'));
-        $this->assertFalse($cache->get('cache-key-3'));
     }
 }

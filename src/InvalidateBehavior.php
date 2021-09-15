@@ -34,7 +34,14 @@ class InvalidateBehavior extends Behavior
      */
     public function invalidate()
     {
-        TagDependency::invalidate($this->cache, array_map([$this, 'buildKey'], (array) $this->tags));
+        $owner = $this->owner;
+        if ($this->owner instanceof BaseActiveRecord) {
+            $owner = clone $this->owner;
+            $owner->refresh();
+        }
+        TagDependency::invalidate($this->cache, array_map([$this, 'buildKey'], (array) $this->tags, array_map(function () use ($owner) {
+            return $owner;
+        },(array) $this->tags)));
     }
 
     /**
@@ -50,16 +57,15 @@ class InvalidateBehavior extends Behavior
     }
 
     /**
-     * @param      array  $keyParts  The key parts
+     * @param array $keyParts The key parts
      *
-     * @return     array  The key.
+     * @return array The key.
      */
-    protected function buildKey($keyParts)
+    protected function buildKey($keyParts, $owner)
     {
         if (!is_array($keyParts)) {
             return $keyParts;
         }
-        $owner = $this->owner;
         return $this->map($keyParts, function ($part, $key) use ($owner) {
             if (is_int($key)) {
                 return $part;
