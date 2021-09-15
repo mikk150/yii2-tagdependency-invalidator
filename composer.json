@@ -1,6 +1,6 @@
 {
     "name": "mikk150/yii2-tagdependency-invalidator",
-    "description": "yii2 sms sending component",
+    "description": "Invalidates Yii2's TagDependency tags on model update/delete and insert",
     "type": "yii2-extension",
     "keywords": [
         "yii2",
